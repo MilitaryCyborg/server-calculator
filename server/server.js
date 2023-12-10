@@ -4,6 +4,8 @@ let PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.static('server/public'));
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
 // Global variable that will contain all of the
 // calculation objects:
@@ -13,9 +15,35 @@ let calculations = []
 // Here's a wonderful place to make some routes:
 
 // GET /calculations
-
+app.get('calculations', (req,res) => {
+  console.log('Test GET /calcs', calculations);
+  res.send(calculations);
+})
 // POST /calculations
+app.post('/calculations', (req, res) => {
+  console.log('Test POST /calculations', req.body);
+  calculateTotal(req.body);
+  calculations.push(req.body);
+  res.sendStatus(201);
+})
 
+function calculateTotal(incObject) {
+  let firstNumber = JSON.parse(incObject.numberOne);
+  let secondNumber = JSON.parse(incObject.numberTwo);
+
+  if (incObject.operator === '+' ){
+    incObject.result = firstNumber + secondNumber
+  }
+  if (incObject.operator === '-' ){
+    incObject.result = firstNumber - secondNumber
+  }
+  if (incObject.operator === '*' ){
+    incObject.result = firstNumber * secondNumber
+  }
+  if (incObject.operator === '/' ){
+    incObject.result = firstNumber / secondNumber
+  }
+}
 
 // PLEASE DO NOT MODIFY ANY CODE BELOW THESE BEARS:
 // 🐻  🐻‍❄️  🧸  🐻  🐻‍❄️  🧸  🐻  🐻‍❄️  🧸  🐻  🐻‍❄️  🧸
