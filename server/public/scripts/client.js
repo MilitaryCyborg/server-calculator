@@ -32,7 +32,7 @@ axios({
     console.log("server error", error);
   })
 document.getElementById("calculator").reset()
-}
+
 
 function displayResults(){
 
